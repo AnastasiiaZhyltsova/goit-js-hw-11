@@ -4,7 +4,7 @@ import './css/style.css';
 const refs = {
     searchForm: document.querySelector(".search-form"),
     btnLoadMore: document.querySelector(".load-more"),
-    gallery: document.queryCommandIndeterm(".gallery"),
+    gallery: document.querySelector(".gallery"),
 };
 refs.btnLoadMore.classList.add('is-hidden');
 const newApiService = new NewApiService();
@@ -21,6 +21,7 @@ async function onSubmitForm(evt) {
     try {
         const response = await newApiService.fetchGallery();
         refs.btnLoadMore.classList.remove('is-hidden');
+        renderCardImage(response.hits);
         console.log(response.hits);
     
     } catch (error) {
