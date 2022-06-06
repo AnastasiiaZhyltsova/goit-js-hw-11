@@ -8,7 +8,9 @@ const refs = {
     btnLoadMore: document.querySelector(".load-more"),
     gallery: document.querySelector(".gallery"),
 };
+
 refs.btnLoadMore.classList.add('is-hidden');
+
 const newApiService = new NewApiService();
 refs.searchForm.addEventListener("submit", onSubmitForm)
 refs.btnLoadMore.addEventListener('click', onClickLoadMore)
@@ -17,6 +19,7 @@ refs.btnLoadMore.addEventListener('click', onClickLoadMore)
 
 async function onSubmitForm(evt) {
     evt.preventDefault();
+    refs.btnLoadMore.classList.add('is-hidden'); 
     newApiService.query = evt.currentTarget.searchQuery.value;
     newApiService.resetPage();
     clearGallery();
@@ -46,9 +49,14 @@ async function onClickLoadMore() {
         return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
     }
     const response = await newApiService.fetchGallery();
-      renderCardImage(response.hits);
-    console.log(response.hits);
-    
+    renderCardImage(response.hits);
+    console.log(response);
+    console.log(response.hits.length);
+    if (response.hits.length === response.totalHits) {
+        refs.btnLoadMore.classList.add('is-hidden');
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        // return
+    }   
 }
 
 function renderCardImage(photos) {

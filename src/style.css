@@ -97,5 +97,12 @@ img{
 }
 .load-more{
     /* margin-top: 20px; */
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+.gallery-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
