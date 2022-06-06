@@ -17,12 +17,14 @@ async function onSubmitForm(evt) {
     evt.preventDefault();
     newApiService.query = evt.currentTarget.searchQuery.value;
     newApiService.resetPage();
+  
     try {
         const response = await newApiService.fetchGallery();
+        refs.btnLoadMore.classList.remove('is-hidden');
         console.log(response.hits);
-        renderCardImage(response.hits);
-     } catch (error) {
-        console.log(error);
+    
+    } catch (error) {
+         console.log(error);
     }
 }
 async function onClickLoadMore() {
@@ -32,16 +34,16 @@ async function onClickLoadMore() {
 }
 
 function renderCardImage(photos) {
-    const markup = photos.map(photo => {
-        `<div class="photo-card">
-  <img src="${photo.webformatURL}" alt="${photo.tags} loading="lazy"/>
+    const markup = photos.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
+        return`<div class="photo-card">
+  <img src="${webformatURL}" alt="${tags} loading="lazy"/>
   <div class="info">
-    <p class="info-item"><b>Likes</b><span>${photo.likes}</span></p>
-    <p class="info-item"><b>Views</b><span>${photo.views}</span></p>
-    <p class="info-item"><b>Comments</b><span>${photo.comments}</span></p>
-    <p class="info-item"><b>Downloads</b><span>${photo.downloads}</span></p>
+    <p class="info-item"><b>Likes</b><span>${likes}</span></p>
+    <p class="info-item"><b>Views</b><span>${views}</span></p>
+    <p class="info-item"><b>Comments</b><span>${comments}</span></p>
+    <p class="info-item"><b>Downloads</b><span>${downloads}</span></p>
   </div>
 </div>`})
         .join('');
     refs.gallery.insertAdjacentHTML('beforeend', markup);
-}
+};
