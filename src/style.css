@@ -7,7 +7,7 @@ body {
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #ecead5;
+    background-color: #f5f4fa;
     color: #212121;
     line-height: 1.5;
     list-style-type: none;
@@ -15,31 +15,87 @@ body {
     margin: 0;
     padding: 0;
 }
-
-.search-form{
+.form-container{
+    display: flex;
     align-items: center;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    justify-content: center;
+   background-color: #2f303a;
+   /* width: ; */
+}
+.search-form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 input{
-    width: 200px;
+    width: 300px;
     height: 50px;
-    padding: 5px;
+
+    padding: 10px;
+    margin-right: 10px;
+
     outline: none;
-    border: #0b4a08 solid 4px;
-    background-color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    background-color: #2f303a;
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: inherit;
+    font-size: 20px;
+
+   
+}
+.btn-submit,
+.load-more{
+    cursor: pointer;
+    min-width: 200px;
+    padding: 10px 0;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.87;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background-color: #2a919c;
 }
 img{
     display: block;
-    width: 320px;
-    height: 220px;
+    width: 100%;
+    height: 280px;
 }
 .gallery{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 200px;
+    padding: 20px 0;
 }
+.photo-card{
+    width: calc((100% - 3 * 30px) / 2);
+    border: 1px solid #2f303a;
 
+    margin-bottom: 20px;
+}
+.info{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+
+}
+.info-item{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    color:#2f303a;
+}
 .is-hidden{
     visibility: hidden;
 }
-
+.load-more{
+    /* margin-top: 20px; */
+    margin-bottom: 20px;
+}
