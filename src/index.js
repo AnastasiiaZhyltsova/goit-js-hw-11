@@ -1,5 +1,7 @@
+import './style.css';
 import NewApiService from "./fetchGallery";
-import './css/style.css';
+import Notiflix from 'notiflix';
+
 
 const refs = {
     searchForm: document.querySelector(".search-form"),
@@ -17,9 +19,16 @@ async function onSubmitForm(evt) {
     evt.preventDefault();
     newApiService.query = evt.currentTarget.searchQuery.value;
     newApiService.resetPage();
-  
+    clearGallery();
+    if (newApiService.query === "" ) {
+        return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
+    }
     try {
         const response = await newApiService.fetchGallery();
+        if (response.hits.length === 0) {
+             Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");
+             return
+        }
         refs.btnLoadMore.classList.remove('is-hidden');
         renderCardImage(response.hits);
         console.log(response.hits);
@@ -30,6 +39,7 @@ async function onSubmitForm(evt) {
 }
 async function onClickLoadMore() {
     const response = await newApiService.fetchGallery();
+      renderCardImage(response.hits);
     console.log(response.hits);
     
 }
@@ -48,3 +58,6 @@ function renderCardImage(photos) {
         .join('');
     refs.gallery.insertAdjacentHTML('beforeend', markup);
 };
+function clearGallery() {
+    refs.gallery.innerHTML = '';
+}
