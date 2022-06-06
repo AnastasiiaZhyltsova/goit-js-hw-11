@@ -17,7 +17,6 @@ refs.btnLoadMore.classList.add('is-hidden');
 const newApiService = new NewApiService();
 refs.searchForm.addEventListener("submit", onSubmitForm)
 refs.btnLoadMore.addEventListener('click', onClickLoadMore)
-
 let perPage = 40;
 let page = 1;
 async function onSubmitForm(evt) {
@@ -30,16 +29,16 @@ async function onSubmitForm(evt) {
     clearGallery();
     // запрос на сервер
     const response = await newApiService.fetchGallery();
-    
+    // lightbox.refresh();
     // если знчение инпута =0 или пустой массив, то тогда останавливаем выполнение кода и выдаем информационное поле.,
     // если общее кол-во обьектов больше чем 0, то инф поле 
         if (newApiService.query === "" || response.hits.length === 0 ) {
-            return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
+             return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
         } else if (response.totalHits > 0) { 
-                Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images`);
+             Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images`);
             }  
     // если все хорошо, то выполняется try (рендерится разметка, появляется кнопка рид мор, лайбокс рефреш )
-        try {                  
+    try { 
             lightbox.refresh();
             refs.btnLoadMore.classList.remove('is-hidden');
             renderCardImage(response.hits);
@@ -94,7 +93,7 @@ function clearGallery() {
 refs.gallery.addEventListener("click", onImgClick)
 let lightbox = new SimpleLightbox('.photo-card a', {
     captions: true,
-});
+}).refresh();
 
 function onImgClick(evt) {
     evt.preventDefault();
