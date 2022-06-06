@@ -1,6 +1,9 @@
 import './style.css';
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 import NewApiService from "./fetchGallery";
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
 
 
 const refs = {
@@ -29,6 +32,7 @@ async function onSubmitForm(evt) {
       try {
           const response = await newApiService.fetchGallery();
           const totalHits = response.totalHits;
+           lightbox.refresh();
         if (response.hits.length === 0) {
             Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");
             return
@@ -50,6 +54,7 @@ async function onClickLoadMore() {
     }
     const response = await newApiService.fetchGallery();
     renderCardImage(response.hits);
+     lightbox.refresh();
     console.log(response);
     console.log(response.hits.length);
     if (response.hits.length === response.totalHits) {
@@ -62,8 +67,8 @@ async function onClickLoadMore() {
 function renderCardImage(photos) {
     const markup = photos.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
         return`<div class="photo-card">
-  <img src="${webformatURL}" alt="${tags} loading="lazy"/>
-  <div class="info">
+        <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags} loading="lazy"/></a>
+   <div class="info">
     <p class="info-item"><b>Likes</b><span>${likes}</span></p>
     <p class="info-item"><b>Views</b><span>${views}</span></p>
     <p class="info-item"><b>Comments</b><span>${comments}</span></p>
@@ -75,4 +80,19 @@ function renderCardImage(photos) {
 };
 function clearGallery() {
     refs.gallery.innerHTML = '';
+}
+
+// lightbox
+refs.gallery.addEventListener("click", onImgClick)
+let lightbox = new SimpleLightbox('.photo-card a', {
+    captions: true,
+    captionsData: "alt",
+    captionDelay: 250,
+});
+
+function onImgClick(evt) {
+    evt.preventDefault();
+     if (!evt.target.nodeName !== 'IMG') {
+        return;
+    }
 }
