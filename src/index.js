@@ -19,6 +19,7 @@ refs.searchForm.addEventListener("submit", onSubmitForm)
 refs.btnLoadMore.addEventListener('click', onClickLoadMore)
 
 let page = 1;
+let lightbox = {};
 async function onSubmitForm(evt) {
     evt.preventDefault();
     refs.btnLoadMore.classList.add('is-hidden'); 
@@ -38,18 +39,20 @@ async function onSubmitForm(evt) {
              Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images`);
             }  
     // если все хорошо, то выполняется try (рендерится разметка, появляется кнопка рид мор, лайбокс рефреш )
-    try { 
-            lightbox.refresh();
+    try {
+      
             refs.btnLoadMore.classList.remove('is-hidden');
             renderCardImage(response.hits);
         } catch (error) {
             console.log(error);
-    }
+        }
+   
     // если колво обьетов на первой странице = общему количеству обьектов 
     if (response.hits.length === response.totalHits) {
         refs.btnLoadMore.classList.add('is-hidden');
         return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
+          lightbox.refresh();
 }
 async function onClickLoadMore() {
     page += 1;
@@ -92,15 +95,18 @@ function clearGallery() {
 
 // lightbox
 refs.gallery.addEventListener("click", onImgClick)
-let lightbox = new SimpleLightbox('.photo-card a', {
-    captions: true,
-}).refresh();
+ lightbox = new SimpleLightbox('.photo-card a', {
+    showCounter: false,
+    captionsData: 'alt',
+    captionDelay: 250,
+  });
 
+    
 function onImgClick(evt) {
     evt.preventDefault();
      if (!evt.target.nodeName != 'IMG') {
         return;
     }
-}
+   }
 // При сабмите и рид море необходимо вызывать функцию lightbox.refresh();
 // <<------------------------------------->>
