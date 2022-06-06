@@ -23,12 +23,16 @@ async function onSubmitForm(evt) {
     if (newApiService.query === "" ) {
         return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
     }
-    try {
-        const response = await newApiService.fetchGallery();
+      try {
+          const response = await newApiService.fetchGallery();
+          const totalHits = response.totalHits;
         if (response.hits.length === 0) {
-             Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");
-             return
+            Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");
+            return
+        } else if (totalHits > 0) { 
+            Notiflix.Notify.success(`Hooray! We found ${totalHits} images`);
         }
+           
         refs.btnLoadMore.classList.remove('is-hidden');
         renderCardImage(response.hits);
         console.log(response.hits);
@@ -38,6 +42,9 @@ async function onSubmitForm(evt) {
     }
 }
 async function onClickLoadMore() {
+     if (newApiService.query === "" ) {
+        return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
+    }
     const response = await newApiService.fetchGallery();
       renderCardImage(response.hits);
     console.log(response.hits);
