@@ -17,7 +17,7 @@ refs.btnLoadMore.classList.add('is-hidden');
 const newApiService = new NewApiService();
 refs.searchForm.addEventListener("submit", onSubmitForm)
 refs.btnLoadMore.addEventListener('click', onClickLoadMore)
-let perPage = 40;
+
 let page = 1;
 async function onSubmitForm(evt) {
     evt.preventDefault();
@@ -58,17 +58,18 @@ async function onClickLoadMore() {
  // если все ок - віполняем трай  
     try {
         renderCardImage(response.hits);
-        lightbox.refresh();
-     } catch (error) {
+       } catch (error) {
          console.log(error);
     }
     // если  номер открытой страницы > больше если totalHits/40, то кнопка пропадает 
-    totalPage = response.totalHits / perPage;
+    let perPage = 40;
+    const totalPage = response.totalHits / perPage;
     console.log(totalPage);
    if (page > totalPage) {
         refs.btnLoadMore.classList.add('is-hidden');
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-    }   
+    }  
+    lightbox.refresh();
 }
 
 function renderCardImage(photos) {
