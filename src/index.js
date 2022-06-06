@@ -39,10 +39,9 @@ async function onSubmitForm(evt) {
              Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images`);
             }  
     // если все хорошо, то выполняется try (рендерится разметка, появляется кнопка рид мор, лайбокс рефреш )
-    try {
-      
-            refs.btnLoadMore.classList.remove('is-hidden');
-            renderCardImage(response.hits);
+    try {      
+           refs.btnLoadMore.classList.remove('is-hidden');
+           renderCardImage(response.hits);
         } catch (error) {
             console.log(error);
         }
@@ -50,6 +49,7 @@ async function onSubmitForm(evt) {
     // если колво обьетов на первой странице = общему количеству обьектов 
     if (response.hits.length === response.totalHits) {
         refs.btnLoadMore.classList.add('is-hidden');
+        lightbox.refresh();
         return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
           lightbox.refresh();
