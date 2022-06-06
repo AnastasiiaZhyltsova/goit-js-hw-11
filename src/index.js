@@ -18,49 +18,57 @@ const newApiService = new NewApiService();
 refs.searchForm.addEventListener("submit", onSubmitForm)
 refs.btnLoadMore.addEventListener('click', onClickLoadMore)
 
- 
-
+let perPage = 40;
+let page = 1;
 async function onSubmitForm(evt) {
     evt.preventDefault();
     refs.btnLoadMore.classList.add('is-hidden'); 
     newApiService.query = evt.currentTarget.searchQuery.value;
+    // при повторном сабмите сбрасываем номер страницы до 1
     newApiService.resetPage();
+    // при повторном сабмите чистим галерею 
     clearGallery();
-    if (newApiService.query === "" ) {
-        return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
-    }
-      try {
-          const response = await newApiService.fetchGallery();
-          const totalHits = response.totalHits;
-           lightbox.refresh();
-        if (response.hits.length === 0) {
-            Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");
-            return
-        } else if (totalHits > 0) { 
-            Notiflix.Notify.success(`Hooray! We found ${totalHits} images`);
-        }
-           
-        refs.btnLoadMore.classList.remove('is-hidden');
-        renderCardImage(response.hits);
-        console.log(response.hits);
+    // запрос на сервер
+    const response = await newApiService.fetchGallery();
     
-    } catch (error) {
-         console.log(error);
+    // если знчение инпута =0 или пустой массив, то тогда останавливаем выполнение кода и выдаем информационное поле.,
+    // если общее кол-во обьектов больше чем 0, то инф поле 
+        if (newApiService.query === "" || response.hits.length === 0 ) {
+            return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
+        } else if (response.totalHits > 0) { 
+                Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images`);
+            }  
+    // если все хорошо, то выполняется try (рендерится разметка, появляется кнопка рид мор, лайбокс рефреш )
+        try {                  
+            lightbox.refresh();
+            refs.btnLoadMore.classList.remove('is-hidden');
+            renderCardImage(response.hits);
+        } catch (error) {
+            console.log(error);
+    }
+    // если колво обьетов на первой странице = общему количеству обьектов 
+    if (response.hits.length === response.totalHits) {
+        refs.btnLoadMore.classList.add('is-hidden');
+        return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
 }
 async function onClickLoadMore() {
-     if (newApiService.query === "" ) {
-        return Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.");  
-    }
+    page += 1;
+// при клике на рид море - запрос на сервер 
     const response = await newApiService.fetchGallery();
-    renderCardImage(response.hits);
-     lightbox.refresh();
-    console.log(response);
-    console.log(response.hits.length);
-    if (response.hits.length === response.totalHits) {
+ // если все ок - віполняем трай  
+    try {
+        renderCardImage(response.hits);
+        lightbox.refresh();
+     } catch (error) {
+         console.log(error);
+    }
+    // если  номер открытой страницы > больше если totalHits/40, то кнопка пропадает 
+    totalPage = response.totalHits / perPage;
+    console.log(totalPage);
+   if (page > totalPage) {
         refs.btnLoadMore.classList.add('is-hidden');
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-        // return
     }   
 }
 
@@ -86,13 +94,13 @@ function clearGallery() {
 refs.gallery.addEventListener("click", onImgClick)
 let lightbox = new SimpleLightbox('.photo-card a', {
     captions: true,
-    captionsData: "alt",
-    captionDelay: 250,
 });
 
 function onImgClick(evt) {
     evt.preventDefault();
-     if (!evt.target.nodeName !== 'IMG') {
+     if (!evt.target.nodeName != 'IMG') {
         return;
     }
 }
+// При сабмите и рид море необходимо вызывать функцию lightbox.refresh();
+// <<------------------------------------->>
