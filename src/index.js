@@ -68,7 +68,8 @@ async function onClickLoadMore() {
     let perPage = 40;
     const totalPage = response.totalHits / perPage;
     console.log(totalPage);
-   if (page > totalPage) {
+    // if (page > totalPage)
+    if(response.hits.length < 40){
         refs.btnLoadMore.classList.add('is-hidden');
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }  

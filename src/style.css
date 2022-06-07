@@ -20,6 +20,8 @@ body {
     align-items: center;
     justify-content: center;
    background-color: #2f303a;
+   width: 100%;
+    position: fixed;
    /* width: ; */
 }
 .search-form{
@@ -28,6 +30,7 @@ body {
     justify-content: center;
     padding-top: 20px;
     padding-bottom: 20px;
+
 }
 input{
     width: 300px;
@@ -72,7 +75,7 @@ img{
     flex-wrap: wrap;
     justify-content: space-between;
     margin: 0 200px;
-    padding: 20px 0;
+    padding: 110px 0;
 }
 .photo-card{
     width: calc((100% - 3 * 30px) / 2);
